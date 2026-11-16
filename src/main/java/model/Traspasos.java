@@ -1,0 +1,69 @@
+package model;
+
+public class Traspasos {
+
+    private int idTraspaso;
+    private String matriculaCoche;
+    private int idVendedor;
+    private int idComprador;
+    private double montoEconomico;
+
+    public Traspasos(int idTraspaso, String matriculaCoche, int idVendedor, int idComprador, double montoEconomico) {
+        this.idTraspaso = idTraspaso;
+        this.matriculaCoche = matriculaCoche;
+        this.idVendedor = idVendedor;
+        this.idComprador = idComprador;
+        this.montoEconomico = montoEconomico;
+    }
+
+    public int getIdTraspaso() {
+        return idTraspaso;
+    }
+
+    public void setIdTraspaso(int idTraspaso) {
+        this.idTraspaso = idTraspaso;
+    }
+
+    public String getMatriculaCoche() {
+        return matriculaCoche;
+    }
+
+    public void setMatriculaCoche(String matriculaCoche) {
+        this.matriculaCoche = matriculaCoche;
+    }
+
+    public int getIdVendedor() {
+        return idVendedor;
+    }
+
+    public void setIdVendedor(int idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public int getIdComprador() {
+        return idComprador;
+    }
+
+    public void setIdComprador(int idComprador) {
+        this.idComprador = idComprador;
+    }
+
+    public double getMontoEconomico() {
+        return montoEconomico;
+    }
+
+    public void setMontoEconomico(double montoEconomico) {
+        this.montoEconomico = montoEconomico;
+    }
+
+    @Override
+    public String toString() {
+        return "Traspasos{" +
+                "idTraspaso=" + idTraspaso +
+                ", matriculaCoche='" + matriculaCoche + '\'' +
+                ", idVendedor=" + idVendedor +
+                ", idComprador=" + idComprador +
+                ", montoEconomico=" + montoEconomico +
+                '}';
+    }
+}
