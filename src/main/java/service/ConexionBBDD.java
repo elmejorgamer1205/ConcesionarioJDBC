@@ -40,15 +40,21 @@ public class ConexionBBDD {
         return instance;
     }
 
-    public static Connection getConexionSQL() throws SQLException {
-        if (conexionSQL == null){
-            conexionSQL = DriverManager.getConnection(url,user,pass);
+    public static Connection getConexionSQL() throws SQLException, BBDDException {
+        if (instance == null) {
+            getInstance();
+        }
+        if (conexionSQL == null || conexionSQL.isClosed()) {
+            conexionSQL = DriverManager.getConnection(url, user, pass);
         }
         return conexionSQL;
     }
 
-    public static Connection getConexionLite() throws SQLException {
-        if (conexionLite == null){
+    public static Connection getConexionLite() throws SQLException, BBDDException {
+        if (instance == null) {
+            getInstance();
+        }
+        if (conexionLite == null || conexionLite.isClosed()) {
             conexionLite = DriverManager.getConnection(urlLite);
         }
         return conexionLite;
