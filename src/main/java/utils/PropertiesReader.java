@@ -1,22 +1,37 @@
 package utils;
 
-import java.io.FileInputStream;
+import exceptions.AppException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesReader {
+    private static final String FILE_NAME = "/config.properties";
+    private Properties p;
+    private static PropertiesReader instance = null;
 
-    public static Properties cargarConfiguracion(){
+    private PropertiesReader() throws AppException {
+        p = new Properties();
+        try (InputStream lector = PropertiesReader.class.getResourceAsStream(FILE_NAME)) {
+            if (lector == null) {
+                throw new AppException("El archivo config.properties no se encuentra en src/main/resources.");
+            }
+            p.load(lector);
+        } catch (IOException e) {
+            throw new AppException(e.getMessage());
+        }
+    }
 
-        Properties config = new Properties();
-
-        try (FileInputStream fis = new FileInputStream("src/main/resources/config.properties")) {
-            config.load(fis);
-        } catch (java.io.FileNotFoundException e) {
-            System.err.println("Error al leer el archivo de configuración: " + e.getMessage());
-        } catch (java.io.IOException e) {
-            System.err.println("Error al leer la configuración: " + e.getMessage());
+    public static PropertiesReader getInstance() throws AppException {
+        if (instance == null){
+            instance = new PropertiesReader();
         }
 
-        return config;
+        return instance;
+    }
+
+    public String get(String propiedad){
+        return p.getProperty(propiedad);
     }
 }
