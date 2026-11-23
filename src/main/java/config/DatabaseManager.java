@@ -1,5 +1,6 @@
 package config;
 
+import model.MotorBBDD;
 import service.ConexionBBDD;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,18 +9,18 @@ import java.sql.Statement;
 public class DatabaseManager {
 
     public static void DDL() {
+        boolean esSQLite = (ConexionBBDD.getMotorActivo() == MotorBBDD.SQLITE);
+        String autoInc = esSQLite ? "INTEGER PRIMARY KEY AUTOINCREMENT" : "INT PRIMARY KEY AUTO_INCREMENT";
 
-        String sqlDropPropietarios = "DROP TABLE IF EXISTS propietarios";
-        String sqlCreatePropietarios = "CREATE TABLE propietarios (" +
-                " id_propietario INT PRIMARY KEY," +
-                " dni VARCHAR(10) NOT NULL," +
+        String sqlCreatePropietarios = "CREATE TABLE IF NOT EXISTS propietarios (" +
+                " id_propietario " + autoInc + "," +
+                " dni VARCHAR(10) NOT NULL UNIQUE," +
                 " nombre VARCHAR(100) NOT NULL," +
                 " apellidos VARCHAR(150) NOT NULL," +
                 " telefono VARCHAR(15)" +
                 ")";
 
-        String sqlDropCoches = "DROP TABLE IF EXISTS coches";
-        String sqlCreateCoches = "CREATE TABLE coches (" +
+        String sqlCreateCoches = "CREATE TABLE IF NOT EXISTS coches (" +
                 " matricula VARCHAR(10) PRIMARY KEY NOT NULL," +
                 " marca VARCHAR(50) NOT NULL," +
                 " modelo VARCHAR(50) NOT NULL," +
@@ -29,9 +30,8 @@ public class DatabaseManager {
                 " CONSTRAINT fk_coches_propietario FOREIGN KEY (id_propietario) REFERENCES propietarios(id_propietario)" +
                 ")";
 
-        String sqlDropTraspasos = "DROP TABLE IF EXISTS traspasos";
-        String sqlCreateTraspasos = "CREATE TABLE traspasos (" +
-                " id_traspaso INT PRIMARY KEY," +
+        String sqlCreateTraspasos = "CREATE TABLE IF NOT EXISTS traspasos (" +
+                " id_traspaso " + autoInc + "," +
                 " matricula_coche VARCHAR(10) NOT NULL," +
                 " id_vendedor INT," +
                 " id_comprador INT NOT NULL," +
@@ -41,22 +41,12 @@ public class DatabaseManager {
                 " CONSTRAINT fk_traspasos_comprador FOREIGN KEY (id_comprador) REFERENCES propietarios(id_propietario)" +
                 ")";
 
-        try (Connection connMySQL = ConexionBBDD.getConexionSQL()) {
-            ejecutarSentencias(connMySQL, false,
-                    sqlDropTraspasos, sqlDropCoches, sqlDropPropietarios,
+        try (Connection conn = ConexionBBDD.getConexion()) {
+            ejecutarSentencias(conn, esSQLite,
                     sqlCreatePropietarios, sqlCreateCoches, sqlCreateTraspasos);
-            System.out.println("Tablas creadas correctamente en MySQL.");
+            System.out.println("Tablas creadas correctamente en " + ConexionBBDD.getMotorActivo() + ".");
         } catch (Exception e) {
-            System.err.println("Error al crear tablas en MySQL: " + e.getMessage());
-        }
-
-        try (Connection connLite = ConexionBBDD.getConexionLite()) {
-            ejecutarSentencias(connLite, true,
-                    sqlDropTraspasos, sqlDropCoches, sqlDropPropietarios,
-                    sqlCreatePropietarios, sqlCreateCoches, sqlCreateTraspasos);
-            System.out.println("Tablas creadas correctamente en SQLite.");
-        } catch (Exception e) {
-            System.err.println("Error al crear tablas en SQLite: " + e.getMessage());
+            System.err.println("Error al crear tablas en " + ConexionBBDD.getMotorActivo() + ": " + e.getMessage());
         }
     }
 

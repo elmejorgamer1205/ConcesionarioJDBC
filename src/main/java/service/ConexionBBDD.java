@@ -2,6 +2,7 @@ package service;
 
 import exceptions.AppException;
 import exceptions.BBDDException;
+import model.MotorBBDD;
 import utils.PropertiesReader;
 
 import java.sql.Connection;
@@ -19,6 +20,7 @@ public class ConexionBBDD {
     private static ConexionBBDD instance;
     private static Connection conexionSQL;
     private static Connection conexionLite;
+    private static MotorBBDD motorActivo = null;
 
     private ConexionBBDD() throws BBDDException {
         try {
@@ -40,7 +42,26 @@ public class ConexionBBDD {
         return instance;
     }
 
-    public static Connection getConexionSQL() throws SQLException, BBDDException {
+    public static MotorBBDD getMotorActivo() {
+        return motorActivo;
+    }
+
+    public static void setMotorActivo(MotorBBDD motor){
+        motorActivo = motor;
+    }
+
+    public static Connection getConexion() throws BBDDException, SQLException {
+        if(motorActivo == null) {
+            throw new BBDDException("No se ha seleccionado ninguna base de datos.");
+        }
+        if (motorActivo == MotorBBDD.MYSQL){
+            return getConexionSQL();
+        }else {
+            return getConexionLite();
+        }
+    }
+
+    private static Connection getConexionSQL() throws SQLException, BBDDException {
         if (instance == null) {
             getInstance();
         }
@@ -50,7 +71,7 @@ public class ConexionBBDD {
         return conexionSQL;
     }
 
-    public static Connection getConexionLite() throws SQLException, BBDDException {
+    private static Connection getConexionLite() throws SQLException, BBDDException {
         if (instance == null) {
             getInstance();
         }
