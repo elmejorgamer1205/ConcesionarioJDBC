@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/** Realizo las operaciones de gestión sobre coches, propietarios y traspasos. */
 public class ConcesionarioService {
 
+    /** Registro un propietario nuevo en la base de datos. */
     public void registrarPropietario(Propietarios p) throws BBDDException {
         String sql = "INSERT INTO propietarios (dni, nombre, apellidos, telefono) VALUES (?, ?, ?, ?)";
 
@@ -35,6 +37,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Inserto un coche nuevo sin asignarle propietario. */
     public void insertarCoche(Coche c) throws BBDDException {
         String sql = "INSERT INTO coches (matricula, marca, modelo, extras, precio) VALUES (?, ?, ?, ?, ?)";
 
@@ -61,6 +64,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Importo los coches del CSV dentro de una transacción. */
     public void importarCSV() throws BBDDException {
         String sql = "INSERT INTO coches (matricula, marca, modelo, extras, precio) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
@@ -115,6 +119,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Devuelvo los coches que todavía pertenecen al concesionario. */
     public List<Coche> listarCochesConcesionario() throws BBDDException {
         List<Coche> coches = new ArrayList<>();
         String sql = "SELECT * FROM coches WHERE id_propietario IS NULL";
@@ -143,6 +148,7 @@ public class ConcesionarioService {
         return coches;
     }
 
+    /** Devuelvo los coches con propietario y el DNI de cada propietario. */
     public List<String> listarCochesPropietarios() throws BBDDException {
         List<String> resultados = new ArrayList<>();
         String sql = "SELECT c.*, p.dni FROM coches c INNER JOIN propietarios p ON c.id_propietario = p.id_propietario";
@@ -167,6 +173,7 @@ public class ConcesionarioService {
         return resultados;
     }
 
+    /** Actualizo marca, modelo, extras y precio del coche indicado. */
     public void modificarCoche(Coche c) throws BBDDException {
         String sql = "UPDATE coches SET marca = ?, modelo = ?, extras = ?, precio = ? WHERE matricula = ?";
 
@@ -190,6 +197,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Borro los traspasos asociados y después el coche indicado. */
     public void borrarCoche(String matricula) throws BBDDException {
         Connection connection = null;
         try {
@@ -233,6 +241,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Cambio el propietario del coche y guardo el traspaso en una transacción. */
     public void realizarTraspaso(String dniComprador, String matricula, double monto) throws BBDDException {
         Connection connection = null;
         try {
@@ -315,6 +324,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Ejecuto en MySQL el procedimiento que busca coches por marca. */
     public void ejecutarProcedimientoMarca(String marca) throws BBDDException {
         if (ConexionBBDD.getMotorActivo() == MotorBBDD.SQLITE) {
             throw new BBDDException("Esta opción solo está disponible en MySQL.");
@@ -347,6 +357,7 @@ public class ConcesionarioService {
         }
     }
 
+    /** Creo el informe general con los datos actuales de la base de datos. */
     public void generarInforme() throws BBDDException {
         List<String> lineas = new ArrayList<>();
 

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/** Gestiono la conexión activa con SQLite o MySQL usando los datos de configuración. */
 public class ConexionBBDD {
     PropertiesReader p;
 
@@ -22,6 +23,7 @@ public class ConexionBBDD {
     private static Connection conexionLite;
     private static MotorBBDD motorActivo = null;
 
+    /** Cargo las direcciones y credenciales que necesito para conectar. */
     private ConexionBBDD() throws BBDDException {
         try {
             p = PropertiesReader.getInstance();
@@ -35,6 +37,7 @@ public class ConexionBBDD {
         }
     }
 
+    /** Devuelvo la instancia única de conexión y la creo si hace falta. */
     public static ConexionBBDD getInstance() throws BBDDException {
         if (instance == null){
             instance = new ConexionBBDD();
@@ -42,14 +45,17 @@ public class ConexionBBDD {
         return instance;
     }
 
+    /** Devuelvo el motor de base de datos que está seleccionado. */
     public static MotorBBDD getMotorActivo() {
         return motorActivo;
     }
 
+    /** Selecciono el motor de base de datos que usarán las operaciones. */
     public static void setMotorActivo(MotorBBDD motor){
         motorActivo = motor;
     }
 
+    /** Devuelvo una conexión al motor seleccionado. */
     public static Connection getConexion() throws BBDDException, SQLException {
         if(motorActivo == null) {
             throw new BBDDException("No se ha seleccionado ninguna base de datos.");
@@ -61,6 +67,7 @@ public class ConexionBBDD {
         }
     }
 
+    /** Abro o reutilizo la conexión con MySQL. */
     private static Connection getConexionSQL() throws SQLException, BBDDException {
         if (instance == null) {
             getInstance();
@@ -71,6 +78,7 @@ public class ConexionBBDD {
         return conexionSQL;
     }
 
+    /** Abro o reutilizo la conexión con SQLite. */
     private static Connection getConexionLite() throws SQLException, BBDDException {
         if (instance == null) {
             getInstance();

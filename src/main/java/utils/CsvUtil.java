@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Leo el fichero CSV y convierto sus filas en coches. */
 public class CsvUtil {
 
+    /** Leo los coches definidos en la ruta configurada y los devuelvo en una lista. */
     public static List<Coche> leerCochesCSV() throws AppException, IOException {
         List<Coche> coches = new ArrayList<>();
         String rutaCsv = PropertiesReader.getInstance().get("ruta.csv");

@@ -21,9 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Presento el menú y coordino las operaciones del concesionario. */
 public class main {
     private static final ConcesionarioService SERVICE = new ConcesionarioService();
 
+    /** Inicio el menú y atiendo las opciones que selecciona el usuario. */
     public static void main(String[] args) {
         boolean salir = false;
         while (!salir) {
@@ -56,6 +58,7 @@ public class main {
         System.out.println("Hasta pronto.");
     }
 
+    /** Muestro por consola las operaciones disponibles. */
     private static void mostrarMenu() {
         System.out.println("=== CONCESIONARIO ===");
         System.out.println("1. Conectar BBDD (SQLite/MySQL)");
@@ -73,6 +76,7 @@ public class main {
         System.out.println("0. Salir");
     }
 
+    /** Pido el motor de base de datos y compruebo la conexión. */
     private static void conectar() throws SQLException, BBDDException {
         System.out.println("Motor: 1. SQLite  2. MySQL");
         int motor = MiEntradaSalida.leerEntero("Selecciona el motor: ");
@@ -87,6 +91,7 @@ public class main {
         }
     }
 
+    /** Pido los datos de un propietario y lo registro. */
     private static void registrarPropietario() throws BBDDException {
         String dni = MiEntradaSalida.leerLinea("DNI: ").trim();
         String nombre = MiEntradaSalida.leerLinea("Nombre: ").trim();
@@ -95,6 +100,7 @@ public class main {
         SERVICE.registrarPropietario(new Propietarios(0, dni, nombre, apellidos, telefono));
     }
 
+    /** Pido los datos de un coche y lo inserto sin propietario. */
     private static void insertarCoche(String matricula) throws BBDDException {
         if (matricula == null) matricula = MiEntradaSalida.leerLinea("Matrícula: ").trim();
         String marca = MiEntradaSalida.leerLinea("Marca: ").trim();
@@ -104,6 +110,7 @@ public class main {
         SERVICE.insertarCoche(new Coche(matricula, marca, modelo, extras, precio, 0));
     }
 
+    /** Pido la matrícula y los nuevos datos para modificar un coche. */
     private static void modificarCoche() throws BBDDException {
         String matricula = MiEntradaSalida.leerLinea("Matrícula del coche a modificar: ").trim();
         String marca = MiEntradaSalida.leerLinea("Nueva marca: ").trim();
@@ -114,6 +121,7 @@ public class main {
         System.out.println("Coche actualizado.");
     }
 
+    /** Leo los extras separados por comas y los convierto en objetos Extra. */
     private static List<Extra> leerExtras() {
         List<Extra> extras = new ArrayList<>();
         for (String extra : MiEntradaSalida.leerListaTexto("Extras (separados por coma, vacío si no hay): ", ","))
@@ -121,18 +129,21 @@ public class main {
         return extras;
     }
 
+    /** Muestro los coches que siguen en el concesionario. */
     private static void listarConcesionario() throws BBDDException {
         List<Coche> coches = SERVICE.listarCochesConcesionario();
         if (coches.isEmpty()) System.out.println("No hay coches en el concesionario.");
         else coches.forEach(System.out::println);
     }
 
+    /** Muestro los coches que tienen propietario. */
     private static void listarPropietarios() throws BBDDException {
         List<String> coches = SERVICE.listarCochesPropietarios();
         if (coches.isEmpty()) System.out.println("No hay coches con propietario.");
         else coches.forEach(System.out::println);
     }
 
+    /** Pido los datos del traspaso y lo ejecuto. */
     private static void realizarTraspaso() throws BBDDException {
         String dni = MiEntradaSalida.leerLinea("DNI del comprador: ").trim();
         String matricula = MiEntradaSalida.leerLinea("Matrícula del coche: ").trim();
@@ -141,6 +152,7 @@ public class main {
         System.out.println("Traspaso realizado correctamente.");
     }
 
+    /** Calculo los datos resumen y los guardo en el informe del concesionario. */
     private static void generarInforme() throws BBDDException, SQLException, IOException {
         List<String> lineas = new ArrayList<>();
         try (Connection connection = ConexionBBDD.getConexion()) {

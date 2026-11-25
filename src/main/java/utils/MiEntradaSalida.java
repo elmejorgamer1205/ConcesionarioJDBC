@@ -8,10 +8,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-//Version2.0
+/** Reúno los métodos que uso para leer y mostrar datos por consola. */
 public class MiEntradaSalida {
     private static Scanner sc;
 
+    /** Creo y devuelvo el lector de consola cuando lo necesito. */
     private static Scanner getScanner() {
         if (sc == null) {
             sc = new Scanner(System.in);
@@ -19,12 +20,7 @@ public class MiEntradaSalida {
         return sc;
     }
 
-    /**
-     * Lee un entero mostrando el mensaje pasado como parámetro
-     *
-     * @param mensaje El mensaje a mostrar
-     * @return el entero leído por teclado
-     */
+    /** Leo y devuelvo un número entero válido. */
     public static int leerEntero(String mensaje) {
         int integer = 0;
         // Variable que almacenará un booleano que indicará si se le debe volver a pedir el dato al usuario.
@@ -50,13 +46,7 @@ public class MiEntradaSalida {
         return integer;
     }
 
-    /**
-     * Número entero
-     *
-     * @param mensaje      El mensaje a mostrar
-     * @param seAceptaCero Si el 0 esta incluido
-     * @return El entero leido por teclado
-     */
+    /** Leo un entero positivo y permito el cero según el parámetro indicado. */
     public static int leerEnteroPositivo(String mensaje, boolean seAceptaCero) {
         int a;
         do {
@@ -69,12 +59,7 @@ public class MiEntradaSalida {
         return a;
     }
 
-    /**
-     * Leer un decimal de tipo double
-     *
-     * @param mensaje El mensaje a introducir
-     * @return Lo introducido por el usuario
-     */
+    /** Leo y devuelvo un número decimal; acepto punto o coma. */
     public static double leerDouble(String mensaje) {
         double integer = 0;
         // Variable que almacenará un booleano que indicará si se le debe volver a pedir el dato al usuario.
@@ -100,12 +85,7 @@ public class MiEntradaSalida {
         return integer;
     }
 
-    /**
-     * Leer un decimal de tipo Float
-     *
-     * @param mensaje mensaje a mostrar
-     * @return lo introducido por el usuario
-     */
+    /** Leo y devuelvo un número decimal de tipo float. */
     public static float leerFloat(String mensaje) {
         float integer = 0;
         // Variable que almacenará un booleano que indicará si se le debe volver a pedir el dato al usuario.
@@ -132,24 +112,12 @@ public class MiEntradaSalida {
     }
 
 
-    /**
-     * Generar un número aleatorio determinado por un máximo
-     *
-     * @param max hasta que número se va a generar
-     * @return número generado aleatoriamente
-     */
+    /** Genero un entero aleatorio entre uno y el máximo indicado. */
     public static int generaAleatorio(int max) {
         return (int) (Math.random() * max + 1);
     }
 
-    /**
-     * Generar un número aleatorio entre un máximo y un mínimo
-     *
-     * @param min              Primer número del intervalo
-     * @param max              Segundo número del intervalo
-     * @param seAceptaElMaximo ¿El máximo entra en ese intervalo?
-     * @return El número genrado aleatoriamente
-     */
+    /** Genero un entero aleatorio dentro del intervalo indicado. */
     public static int generaAleatorioEntre(int min, int max, boolean seAceptaElMaximo) {
         int ventana;
 
@@ -161,25 +129,13 @@ public class MiEntradaSalida {
         return (int) (Math.random() * ventana) + min;
     }
 
-    /**
-     * Leer una cadena de texto
-     *
-     * @param mensaje Mensaje a mostrar
-     * @return String leido
-     */
+    /** Leo y devuelvo la siguiente palabra introducida. */
     public static String leerTexto(String mensaje) {
         System.out.print(mensaje);
         return getScanner().next();
     }
 
-    /**
-     * Leer entero en un rango
-     *
-     * @param mensaje mensaje a mostrar
-     * @param min     valor mínimo incluido
-     * @param max     valor máximo incluido
-     * @return Numero leido por teclado
-     */
+    /** Leo un entero y compruebo que esté dentro del rango indicado. */
     public static int leerEnteroRango(String mensaje, int min, int max) throws MiEntrdadaSalidaException {
         if (min > max) {
             //Mostrar error
@@ -195,12 +151,7 @@ public class MiEntradaSalida {
         return a;
     }
 
-    /**
-     * Recoger el caracter 'S' o 'N'
-     *
-     * @param mensaje Mensaje a mostrar
-     * @return El caracter obtenido por teclado
-     */
+    /** Leo y devuelvo una respuesta afirmativa o negativa. */
     public static char leerSN(String mensaje) {
         char caracter;
         do {
@@ -213,11 +164,7 @@ public class MiEntradaSalida {
         return caracter;
     }
 
-    /**
-     * Imprimir una Matriz por pantalla
-     *
-     * @param matriz La matriz a imprimir
-     */
+    /** Muestro por consola una matriz de enteros. */
     public static void imprimirMatriz(int[][] matriz) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
@@ -227,11 +174,7 @@ public class MiEntradaSalida {
         }
     }
 
-    /**
-     * Imprimir una matriz de strings
-     *
-     * @param matriz matriz a imprimir
-     */
+    /** Muestro por consola una matriz de textos. */
     public static void imprimirMatrizString(String[][] matriz) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
@@ -241,18 +184,13 @@ public class MiEntradaSalida {
         }
     }
 
-    /**
-     * Leer linea de texto
-     *
-     * @param mensaje mensaje a mostar
-     * @return mensaje introducido
-     */
+    /** Leo y devuelvo una línea completa de texto. */
     public static String leerLinea(String mensaje) {
         System.out.print(mensaje);
         return getScanner().nextLine();
     }
 
-    /** Lee una línea y devuelve sus elementos separados por el delimitador indicado. */
+    /** Leo una línea y devuelvo sus elementos separados por el delimitador indicado. */
     public static List<String> leerListaTexto(String mensaje, String delimitador) {
         List<String> elementos = new java.util.ArrayList<>();
         String linea = leerLinea(mensaje);
@@ -263,12 +201,7 @@ public class MiEntradaSalida {
         return elementos;
     }
 
-    /**
-     * Mostrar opciones con un array
-     *
-     * @param mensaje mensaje a mostrar
-     * @param array   lista a recorrer
-     */
+    /** Muestro las opciones no nulas que contiene el array. */
     public static void mostrarOpcionesSinNulos(String mensaje, Object[] array) {
         System.out.println(mensaje);
         int posicion = 1;
@@ -280,12 +213,7 @@ public class MiEntradaSalida {
         System.out.println();
     }
 
-    /**
-     * Mostrar opciones con una colección
-     *
-     * @param mensaje mensaje a mostrar
-     * @param coleccion   coleccion a recorrer
-     */
+    /** Muestro las opciones no nulas que contiene la colección. */
     public static void mostrarOpcionesSinNulos(String mensaje, Collection<Object> coleccion) {
         System.out.println(mensaje);
         int posicion = 1;
@@ -297,6 +225,7 @@ public class MiEntradaSalida {
         System.out.println();
     }
 
+    /** Leo día, mes y año y devuelvo la fecha formada. */
     public static LocalDate fecha(String mensaje) throws MiEntrdadaSalidaException {
         int año =  leerEnteroPositivo("Introduce el año: ",true);
         int mes =  leerEnteroPositivo("Introduce el mes: ",true);
@@ -309,6 +238,7 @@ public class MiEntradaSalida {
 
     }
 
+    /** Leo y devuelvo un único carácter. */
     public static char leerChar(String mensaje) throws MiEntrdadaSalidaException{
         String texto = leerTexto(mensaje);
         if (texto.length() != 1) {throw new MiEntrdadaSalidaException("Debes introducir un caracter.");}
