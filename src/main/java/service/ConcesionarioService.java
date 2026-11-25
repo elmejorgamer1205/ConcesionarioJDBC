@@ -28,7 +28,7 @@ public class ConcesionarioService {
             ps.setInt(4, p.getTelefono());
 
             ps.executeUpdate();
-            System.out.println("Propietario/s registrado/s correctamente");
+            System.out.println("Propietario registrado correctamente");
 
         } catch (SQLException e) {
             throw new BBDDException("Error durante el INSERT: " + e.getMessage());
@@ -54,7 +54,7 @@ public class ConcesionarioService {
             ps.setDouble(5, c.getPrecio());
 
             ps.executeUpdate();
-            System.out.println("Coche/s registrado/s correctamente");
+            System.out.println("Coche registrado correctamente");
 
         } catch (SQLException e) {
             throw new BBDDException("Error durante el INSERT: " + e.getMessage());
@@ -90,7 +90,7 @@ public class ConcesionarioService {
             }
 
             connection.commit();
-            System.out.println("Se ha importado " + coches.size() + " coche/s correctamente ");
+            System.out.println("Se ha importado " + coches.size() + " coche correctamente ");
 
         } catch (AppException | SQLException e) {
             if (connection != null) {
@@ -186,7 +186,7 @@ public class ConcesionarioService {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new BBDDException("Error al modificar el/los coche/s: " + e.getMessage());
+            throw new BBDDException("Error al modificar el coche: " + e.getMessage());
         }
     }
 
