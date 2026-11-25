@@ -1,1 +1,11 @@
-hola
+Conectores JDBC
+
+Ventajas: Me ha permitido usar prácticamente el mismo código Java para trabajar con dos bases de datos distintas sin rehacer todo el proyecto, además de controlar las transacciones (commit y rollback) en operaciones delicadas como los traspasos o el borrado de coches.
+
+Inconvenientes: Obliga a escribir bastante código repetitivo para abrir conexiones, preparar sentencias y cerrar recursos, y aun así tuve que adaptar detalles del SQL según el motor (como AUTOINCREMENT en SQLite frente a AUTO_INCREMENT en MySQL).
+
+SQLite (embebida) frente a MySQL (servidor)
+
+SQLite: Me resultó muy cómoda para desarrollar y hacer pruebas rápidas porque se guarda en un solo archivo y no necesita instalación, pero tiene limitaciones: no admite procedimientos almacenados y tuve que activar las claves foráneas a mano en cada conexión.
+
+MySQL: Es mucho más completa para un entorno real y me permitió usar procedimientos almacenados con CallableStatement, aunque requiere tener un servidor instalado, configurado y encendido antes de lanzar la aplicación.
