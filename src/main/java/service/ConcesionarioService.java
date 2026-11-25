@@ -170,16 +170,48 @@ public class ConcesionarioService {
         return resultados;
     }
 
-    public void modificarCoche() throws BBDDException{
-        String sql = "";
+    public void modificarCoche(Coche c) throws BBDDException{
+        String sql = "UPDATE coches SET marca = ?, modelo = ?, extras = ?, precio = ? WHERE matricula = ?";
+
+        String extras = "";
+        if (c.getExtras() != null && !c.getExtras().isEmpty()) {
+            extras = c.getExtras().stream()
+                    .map(Extra::getNombre)
+                    .collect(Collectors.joining(", "));
+        }
+
+        try (Connection connection = ConexionBBDD.getConexion(); PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setString(1, c.getMaraca());
+            ps.setString(2, c.getModelo());
+            ps.setString(3, extras);
+            ps.setDouble(4, c.getPrecio());
+            ps.setString(5, c.getMatricula());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new BBDDException("Error al modificar el/los coche/s: " + e.getMessage());
+        }
     }
 
-    public void borrarCoche() throws BBDDException{
-        String sql = "";
+    public void borrarCoche(String matricula) throws BBDDException{
+        String sql = "DELETE FROM coches WHERE matricula = ?";
+
+        try (Connection connection = ConexionBBDD.getConexion(); PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setString(1, matricula);
+            ps.executeUpdate();
+        }catch (SQLException e){
+            throw new BBDDException("Error al borrar el coche: " + e.getMessage());
+        }
     }
 
-    public void realizarTraspaso() throws BBDDException{
-        String sql = "";
+    public void realizarTraspaso(String dniComprador, String matricula, double monto) throws BBDDException{
+        int idComprador;
+        String sqlComprador = "SELECT id FROM propietarios WHERE dni = ?";
+        try (Connection connection = ConexionBBDD.getConexion(); PreparedStatement ps = connection.prepareStatement(sqlComprador)){
+
+        }catch (SQLException e){
+            throw new BBDDException("Hubo un error con el propietario: " + e.getMessage());
+        }
     }
 
     public void ejecutarProcedimientoMarca() throws BBDDException{
