@@ -5,6 +5,7 @@ import exceptions.MiEntrdadaSalidaException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 //Version2.0
@@ -84,7 +85,7 @@ public class MiEntradaSalida {
             System.out.println(mensaje);
             // Comprobamos si el usuario está introduciendo algo correcto usando la excepción del método parseInt.
             try {
-                integer = Double.parseDouble(getScanner().nextLine());
+                integer = Double.parseDouble(getScanner().nextLine().replace(',', '.'));
                 // Si llegamos hasta aquí, es porque el usuario ha introducido un dato correcto.
                 flag = false;
             }
@@ -249,6 +250,17 @@ public class MiEntradaSalida {
     public static String leerLinea(String mensaje) {
         System.out.print(mensaje);
         return getScanner().nextLine();
+    }
+
+    /** Lee una línea y devuelve sus elementos separados por el delimitador indicado. */
+    public static List<String> leerListaTexto(String mensaje, String delimitador) {
+        List<String> elementos = new java.util.ArrayList<>();
+        String linea = leerLinea(mensaje);
+        if (linea.trim().isEmpty()) return elementos;
+        for (String elemento : linea.split(delimitador)) {
+            if (!elemento.trim().isEmpty()) elementos.add(elemento.trim());
+        }
+        return elementos;
     }
 
     /**
