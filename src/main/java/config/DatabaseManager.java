@@ -6,10 +6,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/** Creo las tablas que necesita el concesionario en la base de datos activa. */
+/** Creo las tablas y procedimientos que necesita el concesionario en la base de datos activa. */
 public class DatabaseManager {
 
-    /** Preparo el DDL y creo las tablas si todavía no existen. */
+    /** Preparo el DDL y creo las estructuras si todavía no existen. */
     public static void DDL() {
         boolean esSQLite = (ConexionBBDD.getMotorActivo() == MotorBBDD.SQLITE);
         String autoInc = esSQLite ? "INTEGER PRIMARY KEY AUTOINCREMENT" : "INT PRIMARY KEY AUTO_INCREMENT";
@@ -52,7 +52,7 @@ public class DatabaseManager {
         }
     }
 
-    /** Ejecuto las sentencias SQL y activo las claves foráneas cuando uso SQLite. */
+    /** Ejecuto las sentencias SQL, activo claves foráneas en SQLite y creo el procedimiento en MySQL. */
     private static void ejecutarSentencias(Connection conn, boolean esSQLite, String... sentencias) throws SQLException {
         try (Statement stmt = conn.createStatement()) {
             if (esSQLite) {
@@ -60,6 +60,13 @@ public class DatabaseManager {
             }
             for (String sql : sentencias) {
                 stmt.execute(sql);
+            }
+            if (!esSQLite) {
+                stmt.execute("DROP PROCEDURE IF EXISTS sp_coches_por_marca");
+                stmt.execute("CREATE PROCEDURE sp_coches_por_marca(IN p_marca VARCHAR(50)) " +
+                        "BEGIN " +
+                        "   SELECT * FROM coches WHERE marca = p_marca; " +
+                        "END");
             }
         }
     }
